@@ -3,22 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LibroController extends Controller
 {
     public function index()
     {
-        // Si no hay libros en sesión, redirigir a simular datos
-        if (!session()->has('libros')) {
-            return redirect('/simular-datos');
-        }
-        
-        return view('libros.index', [
-            'libros' => session('libros')
-        ]);
+        $libros = DB::select("SELECT * FROM libros");
+        return view('libros.index', compact('libros'));
     }
-    
-    public function create()
+        public function create()
     {
         return view('libros.create', [
             'autores' => session('autores', []),
